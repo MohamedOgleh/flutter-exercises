@@ -1,0 +1,351 @@
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:untitled/widget/button.dart';
+
+class Calculator extends StatefulWidget {
+  const Calculator({super.key});
+
+  @override
+  State<Calculator> createState() => _CalculatorState();
+}
+
+class _CalculatorState extends State<Calculator> {
+  List<String> numbers = ['1', '2', '3'];
+  List<String> operands = ['+', '-', '*', '='];
+  String userInput = '';
+  String num1 = '';
+  String num2 = '';
+  String operand = '';
+
+  double result = 0;
+
+  String question = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Calculator'),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                    userInput.isEmpty ? '0' : userInput,
+                    style: GoogleFonts.poppins(fontSize: 20),
+                  ),
+                  Text(
+                    'The answer is $result',
+                    style: GoogleFonts.poppins(fontSize: 20),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    ...operands.map(
+                      (operand) => ButtonWidget(
+                        title: operand,
+                        onTap: operand == '='
+                            ? () {
+                                equalIsTapped();
+                              }
+                            : () {
+                                btnOperandTapped(operand);
+                              },
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    ...numbers.map(
+                      (number) => ButtonWidget(
+                        title: number,
+                        onTap: () {
+                          btnNumberTapped(number);
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void btnNumberTapped(String number) {
+    setState(() {
+      question += number;
+    });
+    print('$number is tapped');
+  }
+
+  void btnOperandTapped(String operand) {
+    num1 += userInput;
+    userInput = '';
+    this.operand = operand;
+
+    setState(() {
+      // userInput += operand;
+    });
+    print('$operand is tapped');
+    print('num1: $num1');
+  }
+
+  void equalIsTapped() {
+    num2 += userInput;
+    setState(() {
+      result = calculate(operand, double.parse(num1), double.parse(num2));
+    });
+
+    print('Values num1: $num1 num2: $num2 and the operand is $operand');
+  }
+
+  double calculate(String operand, double num1, double num2) {
+    switch (operand) {
+      case '+':
+        result = num2 + num2;
+        break;
+
+      case '-':
+        result = num1 - num2;
+        break;
+
+      case '*':
+        result = num2 * num1;
+    }
+
+    return result;
+  }
+}
+
+
+
+
+
+class Operations {
+  // static bool validateInput(String userInput) {
+  //   // Pattern reserveWords = '%,*';
+  //
+  //   // for (int i = 0; i < userInput.length; i++) {
+  //   if (!(userInput.contains('*') ||
+  //       userInput.contains('-') ||
+  //       userInput.contains('/') ||
+  //       userInput.contains('+'))) {
+  //     return false;
+  //   }
+  //   return true;
+  // }
+  //
+  // static bool isOperator(String text) {
+  //   if (text == '/' || text == '+' || text == 'x' || text == '-') return true;
+  //   return false;
+  // }
+  //
+  // static String checkOperator(String operator){
+  //   String operator
+  //   if(isOperator(operator)){
+  //
+  //   }
+  //   return operator;
+  // }
+
+  bool isOperator(String text) {
+    if (text == '/' || text == '+' || text == 'x' || text == '-') return true;
+    return false;
+  }
+
+  static void checkOperator(String question) {
+    late String operand;
+    // for(int i)
+  }
+}
+
+
+------------
+
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:untitled/wigdets/CalculatorOperations.dart';
+import 'package:untitled/wigdets/button.dart';
+
+class Calculator extends StatefulWidget {
+  const Calculator({super.key});
+
+  @override
+  State<Calculator> createState() => _CalculatorState();
+}
+
+class _CalculatorState extends State<Calculator> {
+  String result = '';
+  final List<String> buttonText = [
+    '7',
+    '8',
+    '9',
+    '/',
+    '4',
+    '5',
+    '6',
+    'x',
+    '1',
+    '2',
+    '3',
+    '-',
+    '0',
+    '.',
+    '=',
+    '+',
+    'C'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Calculator',
+          style: GoogleFonts.poppins(),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              child: Align(
+                alignment: Alignment(0, 0.7),
+                child: Text(
+                  result,
+                  style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: GridView.count(
+              crossAxisCount: 4,
+              children: [
+                ...buttonText.map(
+                  (text) => Button(
+                    title: text,
+                    onTap: () {
+                      // result += text;
+                      if (text == '/' ||
+                          text == '+' ||
+                          text == 'x' ||
+                          text == '-') {
+                        btnOperatorIsTapped(text);
+                      }
+                    },
+                    // onTap: text == '='
+                    //     ? () {
+                    //         print(
+                    //             '$text Input is valid ${Operations.validateInput(text)}');
+                    //       }
+                    //     : () {
+                    //         // print('another tapped');
+                    //
+                    //         // print(giveResult(text));
+                    //       },
+
+                    // onTap: () {
+                    //   setState(() {
+                    //     validateInput(text);
+                    //   });
+                    // },
+                    //
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  bool isOperator(String text) {
+    if (text == '/' || text == '+' || text == 'x' || text == '-') return true;
+    return false;
+  }
+
+  List<String> giveResult(String text) {
+    List<String> operators = ['-', 'x'];
+
+    List<String> split = text.split(operators as Pattern);
+    return split;
+  }
+
+  bool isValidQuestion(text) {
+    return true;
+  }
+
+  void validateInput(String userInput) {
+    late String num1;
+    late String num2;
+    late String operator;
+
+    for (var i = 0; i < userInput.length; i++) {
+      if (isOperator(userInput[i])) {
+        print("Operator were found $userInput[i]");
+      } else {
+        print("Regular Character was found $userInput[i]");
+      }
+    }
+  }
+
+  void checkNumbers(String question) {
+    late String num1;
+    late String num2;
+    late String operator;
+    for (var i = 0; i < question.length; i++) {
+      if (!isOperator(question[i])) {
+        num1 += question[i];
+      }
+    }
+  }
+
+  String add(String num1, String num2) {
+    return "It's add";
+  }
+
+  String minus(String num1, String num2) {
+    return "It's minus";
+  }
+
+  String multiply(String num1, String num2) {
+    return "It's multiply";
+  }
+
+  String division(String num1, String num2) {
+    return "It's division";
+  }
+
+  String calculate(String text, String question) {
+    // switch()
+    return "";
+  }
+
+  void btnOperatorIsTapped(String operators) {
+    print("Operator is tapped $operators");
+  }
+}
+
